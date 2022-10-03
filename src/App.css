@@ -3,8 +3,8 @@
     position: fixed;
 
     bottom: 0;
-    left: 10px;
-    right: 10px;
+    left: 0.25rem;
+    right: 0.25rem;
     
     flex-grow: 1;
     margin: 10px;
@@ -15,6 +15,12 @@
 #text-box {
     font-size: large;
     flex-grow: 1;
+}
+
+#submit-button {
+    background-color: rgb(83, 222, 176);
+    width: fit-content;
+    font-size: larger;
 }
 
 #messages {
