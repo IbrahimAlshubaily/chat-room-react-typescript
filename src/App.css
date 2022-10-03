@@ -1,0 +1,30 @@
+#user-input {
+    display: flex;
+    position: fixed;
+
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    
+    flex-grow: 1;
+    margin: 10px;
+    border-radius: 1rem;
+    height: 3rem;
+}
+
+#text-box {
+    font-size: large;
+    flex-grow: 1;
+}
+
+#messages {
+    list-style-type: none;
+}
+#messages > li {
+    font-size:x-large;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    background-color: rgba(125, 124, 124, 0.499);
+    width: fit-content;
+}
