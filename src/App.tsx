@@ -1,43 +1,77 @@
+import { useEffect, useState } from 'react';
+import {io } from 'socket.io-client';
+ 
 import './App.css'
 
+const socket = io('ws://localhost:8080');
 
+export interface SocketData { 
+    id: string,
+    date: string, 
+    text: string,
+}
+type AppState = {
+  messages: SocketData[],
+
+}
 export default function App() {
+
+  const [state, setState] = useState({messages: []} as AppState);
+  useEffect(() => {
+    socket.on('message', msg => {
+      const updatedMessages = state.messages;
+      updatedMessages.push(msg);
+      setState({messages: updatedMessages});
+    });
+  }, []);
+
+  
+
+  function emitMessage() {
+    const text = document.getElementById('text-box') as HTMLInputElement;
+    if (text.value){
+      console.log('emmtiting')
+      socket.emit('message', text.value);
+      text.value = '';
+    }
+  }
 
   return (
     <div className="App"> 
-      {MessagesForm()}
+      <MessagesForm messages = {state.messages}/>
       <div id='user-input'>
-        {InputField()} 
-        {SubmitButton()}
+        <InputField/> 
+        <SubmitButton handleClick={emitMessage}/>
       </div>
     </div>
   );
 }
 
-function MessagesForm() : JSX.Element {
-  return <ul id='messages' className='messages-form'></ul>
+function formatMsg(msg: any) {
+  return msg.id + " @ " + msg.date + "<br>" + msg.text;
+}
+
+function MessagesForm(props: AppState) : JSX.Element {
+  return <ul id='messages' className='messages-form'>
+    {props.messages.map( (msg : SocketData) => getListItem(msg))}
+    </ul>
+}
+
+function getListItem(msg: SocketData) {
+  const className = socket.id.substring(0,2) === msg.id ? 'my-message' : 'other-message';
+  return <li id={msg.date} className={className} >{formatMsg(msg)}</li>
 }
 
 function InputField() : JSX.Element {
-  return <input id='text-box' className='input-field' onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      document.getElementById('submit-button')?.click()
-    }
-  }}/>
+  return <input id='text-box' className='input-field'/>
 }
 
-function SubmitButton() : JSX.Element {
-  return <button id='submit-button' onClick={updateMessageForm}>Submit</button>
+type SubmitButtonProps = {
+  handleClick : Function,
+}
+function SubmitButton(props : SubmitButtonProps) : JSX.Element {
+  return <button id='submit-button' onClick={() => props.handleClick()}>Submit</button>
 }
 
-function updateMessageForm() {
-  const text = document.getElementById('text-box') as HTMLInputElement;
-  if (text.value){
-    const messages = document.getElementById('messages') as HTMLUListElement
-    const li = document.createElement('li')
-    li.textContent = text.value;
-    messages.append(li);
-    text.value = '';
-  }
-}
+
 

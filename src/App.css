@@ -26,11 +26,22 @@
 #messages {
     list-style-type: none;
 }
+
+
 #messages > li {
     font-size:x-large;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 0.5rem 2rem;
     border-radius: 1rem;
     background-color: rgba(125, 124, 124, 0.499);
     width: fit-content;
+    clear: both;
+}
+
+#messages > li.my-message {
+    background-color:rgb(20, 169, 25);
+    float: right;
+    margin-right: 2.53rem;
+    clear: both;
+
 }
